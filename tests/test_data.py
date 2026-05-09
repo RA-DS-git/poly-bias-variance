@@ -1,8 +1,3 @@
-"""
-tests/test_data.py  --  unit tests for the data-generating process.
-Run with:  pytest tests/ -v
-"""
-
 import numpy as np
 import pandas as pd
 import pytest
@@ -33,14 +28,12 @@ def test_generate_data_different_seeds():
 
 
 def test_x_distribution():
-    """X should be approximately N(0,1)."""
     df = generate_data(100_000, seed=0)
     assert abs(df.X.mean()) < 0.02
     assert abs(df.X.std() - 1.0) < 0.02
 
 
 def test_noise_variance():
-    """Residuals from true f should have std ~3."""
     df = generate_data(100_000, seed=0)
     residuals = df.Y - true_f(df.X.values)
     assert abs(residuals.std() - 3.0) < 0.05
@@ -62,7 +55,6 @@ def test_grow_dataset_sizes():
 
 
 def test_grow_dataset_nested():
-    """Smaller subsets are the prefix of larger ones."""
     base = generate_data(100, seed=0)
     datasets = grow_dataset(base, [100, 300], seed=1)
     small = datasets[100]
@@ -120,7 +112,6 @@ def test_evaluate_all_keys():
 
 
 def test_bayes_rate():
-    """Optimal predictor MSE should converge to sigma^2 = 9."""
     test = generate_data(200_000, seed=999)
     y_hat = true_f(test.X.values)
     mse = float(np.mean((test.Y.values - y_hat) ** 2))
